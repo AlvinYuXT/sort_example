@@ -1,24 +1,36 @@
 function heapSort(arr) {
   console.time('test')
   let length = arr.length
-  while (length > 0) {
-    for (let i = length - 1; i >= 0; i--) {
-      let parent = ~~((i - 1) / 2)
-      if (arr[i] > arr[parent]) {
-        let temp = arr[parent]
-        arr[parent] = arr[i]
-        arr[i] = temp
-      }
-    }
-    let max = arr[0];
-    arr[0] = arr[length - 1]
-    arr[length - 1] = max
-    length--
+  let result = []
+  for (let i = parseInt(length / 2); i > 0; i--) {
+    sink(arr, i - 1)
+  }
+  while (arr.length > 0) {
+    exchange(arr, 0, arr.length - 1)
+    let temp = arr.pop()
+    result.unshift(temp)
+    sink(arr, 0)
+    i++
   }
   console.timeEnd('test')
-  return arr
+  return result
 }
 
+function sink(arr, index) {
+  while (2 * index + 1 < arr.length) {
+    let child = 2 * index + 1
+    if (arr[child + 1] && arr[child + 1] > arr[child]) child++
+    if (arr[child] < arr[index]) break;
+    exchange(arr, child, index)
+    index = child
+  }
+}
+
+function exchange(arr, i, j) {
+  arr[i] = arr[j] - arr[i]
+  arr[j] = arr[j] - arr[i]
+  arr[i] = arr[i] + arr[j]
+}
 
 var a = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
 heapSort(a)
